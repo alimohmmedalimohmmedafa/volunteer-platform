@@ -163,9 +163,11 @@
                                   action="{{ route('organization.applications.accept', $application) }}">
                                 @csrf
                                 @method('PATCH')
+                                <textarea name="message" rows="4" class="form-control mb-3" required
+                                          placeholder="اكتب رسالة القبول وتعليمات الحضور للمتطوع..."></textarea>
                                 <button type="submit" class="btn btn-success">
                                     <i class="bi bi-check-lg me-1" aria-hidden="true"></i>
-                                    تأكيد القبول
+                                    تأكيد القبول وإرسال الرسالة
                                 </button>
                             </form>
                         </div>

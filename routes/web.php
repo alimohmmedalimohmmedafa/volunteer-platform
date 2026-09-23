@@ -8,6 +8,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\VolunteerApplicationController;
 use App\Http\Controllers\VolunteerDashboardController;
 use App\Http\Controllers\VolunteerNotificationController;
+use App\Http\Controllers\VolunteerMessageController;
 use App\Http\Controllers\VolunteerProfileController;
 use App\Http\Controllers\Admin\OrganizationController as AdminOrganizationController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -416,6 +417,16 @@ Route::middleware(['auth', 'role:admin'])
             VolunteerNotificationController::class,
             'readAll'
         ])->name('notifications.readAll');
+
+        Route::get('/messages', [
+            VolunteerMessageController::class,
+            'index'
+        ])->name('messages.index');
+
+        Route::get('/messages/{message}', [
+            VolunteerMessageController::class,
+            'show'
+        ])->name('messages.show');
     });
 
 

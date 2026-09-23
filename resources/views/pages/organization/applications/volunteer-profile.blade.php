@@ -161,16 +161,35 @@
         </div>
 
         @if($application->status === 'pending')
-            <div class="d-flex flex-wrap gap-2">
-                <form method="POST" action="{{ route('organization.applications.accept', $application) }}" class="flex-grow-1">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" class="btn btn-success w-100">
-                        <i class="bi bi-check-lg me-1" aria-hidden="true"></i>
-                        قبول الطلب
-                    </button>
-                </form>
+            <div class="panel mb-3">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <i class="bi bi-send ms-2 text-primary" aria-hidden="true"></i>
+                        رسالة القبول
+                    </h2>
+                </div>
 
+                <div class="panel-body">
+                    <p class="text-muted small">اكتب للمتطوع تعليمات الحضور أو أي تفاصيل مهمة قبل قبول الطلب.</p>
+                    <form method="POST" action="{{ route('organization.applications.accept', $application) }}">
+                        @csrf
+                        @method('PATCH')
+                        <textarea name="message" rows="6" class="form-control mb-3" required
+                                  placeholder="مرحبًا {{ $user?->name }}،
+تم قبول طلبك للمشاركة في الفرصة.
+نرجو الحضور يوم ... الساعة ...">{{ old('message') }}</textarea>
+                        @error('message')
+                            <div class="text-danger small mb-3">{{ $message }}</div>
+                        @enderror
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-check-lg me-1" aria-hidden="true"></i>
+                            قبول الطلب وإرسال الرسالة
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
                 <form method="POST" action="{{ route('organization.applications.reject', $application) }}" class="flex-grow-1">
                     @csrf
                     @method('PATCH')

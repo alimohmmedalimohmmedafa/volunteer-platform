@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Organization;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\Notification;
+use App\Models\VolunteerMessage;
 use App\Mail\ApplicationStatusMail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -51,7 +53,7 @@ class OrganizationApplicationController extends Controller
     /**
      * Accept a pending application.
      */
-    public function accept(Application $application)
+    public function accept(Request $request, Application $application)
     {
         $this->authorizeApplication($application);
 
@@ -62,7 +64,30 @@ class OrganizationApplicationController extends Controller
             );
         }
 
+        $validated = $request->validate([
+            'message' => ['required', 'string', 'max:5000'],
+        ], [
+            'message.required' => 'يرجى كتابة رسالة للمتطوع قبل قبول الطلب.',
+            'message.max' => 'رسالة المتطوع يجب ألا تتجاوز 5000 حرف.',
+        ]);
+
         $application->update(['status' => 'accepted']);
+
+        $organization = auth()->user()->organization;
+        $application->load(['job', 'volunteer.user']);
+
+        VolunteerMessage::create([
+            'application_id' => $application->id,
+            'organization_id' => $organization->id,
+            'volunteer_id' => $application->volunteer->user->id,
+            'subject' => 'تم قبول طلبك في فرصة تطوعية',
+            'message' => "منظمة: {$organization->name}\n"
+                . "الفرصة: {$application->job->title}\n"
+                . "التاريخ: {$application->job->start_date->format('d/m/Y')}\n\n"
+                . "مرحبًا {$application->volunteer->user->name}،\n"
+                . "تم قبول طلبك للمشاركة في الفرصة.\n\n"
+                . $validated['message'],
+        ]);
 
         $this->notifyAndEmail($application, 'accepted');
 

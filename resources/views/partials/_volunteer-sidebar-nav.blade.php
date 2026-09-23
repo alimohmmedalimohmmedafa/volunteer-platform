@@ -2,6 +2,9 @@
     $unreadNotifications = auth()->user()->notifications()
         ->where('is_read', false)
         ->count();
+    $unreadMessages = auth()->user()->volunteerMessages()
+        ->where('is_read', false)
+        ->count();
 @endphp
 
 <div class="d-flex flex-column h-100">
@@ -50,6 +53,15 @@
                 <span class="badge bg-danger rounded-pill ms-1">
                     {{ $unreadNotifications }}
                 </span>
+            @endif
+        </a>
+
+        <a href="{{ route('volunteer.messages.index') }}"
+           class="nav-link {{ request()->routeIs('volunteer.messages*') ? 'active' : '' }}">
+            <i class="bi bi-envelope ms-2"></i>
+            رسائلي
+            @if($unreadMessages > 0)
+                <span class="badge bg-danger rounded-pill ms-1">{{ $unreadMessages }}</span>
             @endif
         </a>
 

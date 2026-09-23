@@ -45,6 +45,11 @@ public function notifications(): HasMany
     return $this->hasMany(Notification::class);
 }
 
+public function volunteerMessages(): HasMany
+{
+    return $this->hasMany(VolunteerMessage::class, 'volunteer_id');
+}
+
 public function isSuspended(): bool
 {
     return $this->status === 'suspended';
