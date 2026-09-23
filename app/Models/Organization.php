@@ -35,6 +35,10 @@ class Organization extends Model
         return $this->belongsTo(User::class);
     }
 
+
+    protected $casts = [
+    'approved_at' => 'datetime',
+];
     /**
      * User who approved the organization.
      */

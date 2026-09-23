@@ -188,6 +188,11 @@ Route::middleware([
             'index'
         ])->name('applications.index');
 
+        Route::get('/applications/{application}/volunteer', [
+            OrganizationApplicationController::class,
+            'volunteerProfile'
+        ])->name('applications.volunteer-profile');
+
         Route::get('/applications/{application}/cv', [
             OrganizationApplicationController::class,
             'downloadCv'

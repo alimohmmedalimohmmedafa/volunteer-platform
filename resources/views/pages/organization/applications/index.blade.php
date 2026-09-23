@@ -50,7 +50,10 @@
                                 @endif
 
                                 <div>
-                                    <div class="fw-semibold">{{ $application->volunteer?->user?->name ?? 'غير معروف' }}</div>
+                                    <a href="{{ route('organization.applications.volunteer-profile', $application) }}"
+                                       class="fw-semibold text-decoration-none">
+                                        {{ $application->volunteer?->user?->name ?? 'غير معروف' }}
+                                    </a>
                                     <small class="text-muted">{{ $application->volunteer?->user?->email ?? '' }}</small>
                                 </div>
                             </div>

@@ -33,6 +33,21 @@ class OrganizationApplicationController extends Controller
         );
     }
 
+    public function volunteerProfile(Application $application)
+    {
+        $this->authorizeApplication($application);
+
+        $application->load([
+            'job',
+            'volunteer.user',
+        ]);
+
+        return view(
+            'pages.organization.applications.volunteer-profile',
+            compact('application')
+        );
+    }
+
     /**
      * Accept a pending application.
      */
